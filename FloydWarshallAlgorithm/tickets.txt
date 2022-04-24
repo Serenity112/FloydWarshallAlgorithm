@@ -1,0 +1,4 @@
+Spb;Kingisepp;100;200
+Spb;Omsk;1;2
+Omsk;Kirov;90;170
+Kirov;Kingisepp;7;8
