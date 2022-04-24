@@ -18,17 +18,18 @@ Map<string, int> giveCitiesUniqueNumbers(List<AirTicket>& ticketsList)
 
 		try
 		{
+			cityNumerics->Insert(ticket.departure, cityCount);
+			cityCount++;	
+		}
+		catch (const std::exception&){}
+
+		try
+		{
 			cityNumerics->Insert(ticket.arrival, cityCount);
 			cityCount++;
-
-			cityNumerics->Insert(ticket.departure, cityCount);
-			cityCount++;
 		}
-		catch (const std::exception&)
-		{
-		}
+		catch (const std::exception&){}
 	}
-	
 	delete itr;
 
 	return *cityNumerics;
@@ -90,8 +91,12 @@ Graph buildGraphByTickets(List<AirTicket>& ticketsList, Map<string, int>& cityNu
 		string city1 = ticket.departure;
 		string city2 = ticket.arrival;
 
+		cout << "Search: " << city1 << " " << city2 << endl;
+
 		int numCity1 = cityNumerics.Find(city1);
 		int numCity2 = cityNumerics.Find(city2);
+
+		cout << "Found: " << numCity1 << " " << numCity2 << endl;
 
 		if (ticket.price1 == "N/A")
 			graph->matrix[numCity1][numCity2] = inf;
@@ -112,19 +117,25 @@ double buildOptimalWay(List<AirTicket>& ticketsList, string city1, string city2)
 {
 	Map<string, int> cityNumerics = giveCitiesUniqueNumbers(ticketsList);
 
-	try
+	auto itr = cityNumerics.create_iterator();
+	while(itr->has_next())
 	{
-		cityNumerics.Find(city1);
-		cityNumerics.Find(city2);
+		Pair<string, int> pair = itr->next();
+		cout << pair.first << " " << pair.second << endl;
 	}
-	catch (invalid_argument& expetion)
-	{
-		throw invalid_argument("Wrong city name");
-	}
-	
+
+
 	Graph graph = buildGraphByTickets(ticketsList, cityNumerics);
 
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+			cout << graph.matrix[i][j] << " ";
+		cout << endl;
+	}
+
 	FloydWarshall(graph);
+
 
 	int numCity1 = cityNumerics.Find(city1);
 	int numCity2 = cityNumerics.Find(city2);
@@ -132,5 +143,14 @@ double buildOptimalWay(List<AirTicket>& ticketsList, string city1, string city2)
 	if (graph.matrix[numCity1][numCity2] == inf)
 		throw invalid_argument("No way");
 
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+			cout << graph.matrix[i][j] << " ";
+		cout << endl;
+	}
+
 	return graph.matrix[numCity1][numCity2];
+
+
 }
