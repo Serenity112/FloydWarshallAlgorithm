@@ -7,7 +7,6 @@
 
 List<AirTicket> getTicketsList(string);
 
-//Pair<List<string>, double>
 Pair<List<string>, double> findOptimalSolution(List<AirTicket>&, string, string);
 
 #endif
