@@ -44,18 +44,6 @@ void FloydWarshall(Graph& graph, Graph& pathGraph)
         }
     }
 
-    cout << "Path 1: " << endl;
-    {
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                cout << pathMatrix[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-
     for (int k = 0; k < size; k++)
     {
         for (int i = 0; i < size; i++)
@@ -74,17 +62,4 @@ void FloydWarshall(Graph& graph, Graph& pathGraph)
             }
         }
     }
-
-    cout << "Path 2: " << endl;
-    {
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                cout << pathMatrix[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-
 }

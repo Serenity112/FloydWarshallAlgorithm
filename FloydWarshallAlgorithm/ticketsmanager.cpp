@@ -42,23 +42,23 @@ List<string> tokenize(string line, string separator = " ")
 {
 	int start = 0;
 	int end = line.find(separator);
-	List<string>* splittedLines = new List<string>();
+	List<string> splittedLines;
 
 	while (end != -1)
 	{
-		splittedLines->push_back(line.substr(start, end - start));
+		splittedLines.push_back(line.substr(start, end - start));
 		start = end + separator.size();
 		end = line.find(separator, start);
 	}
 
-	splittedLines->push_back(line.substr(start, end - start));
+	splittedLines.push_back(line.substr(start, end - start));
 
-	return *splittedLines;
+	return splittedLines;
 }
 
 List<AirTicket> getTicketsList(string filename)
 {
-	List<AirTicket>* ticketsList = new List<AirTicket>();
+	List<AirTicket> ticketsList;
 
 	ifstream finput;
 	finput.open(filename);
@@ -76,10 +76,10 @@ List<AirTicket> getTicketsList(string filename)
 		delete newTicket_itr;
 
 		AirTicket ticket(token1, token2, token3, token4);
-		ticketsList->push_back(ticket);
+		ticketsList.push_back(ticket);
 	}
 
-	return *ticketsList;
+	return ticketsList;
 }
 
 Graph buildGraphByTickets(List<AirTicket>& ticketsList, Map<string, int>& cityNumerics)
@@ -96,15 +96,8 @@ Graph buildGraphByTickets(List<AirTicket>& ticketsList, Map<string, int>& cityNu
 	{
 		AirTicket ticket = ticket_itr->next();
 
-		string city1 = ticket.departure;
-		string city2 = ticket.arrival;
-
-		cout << "Search: " << city1 << " " << city2 << endl;
-
-		int numCity1 = cityNumerics.Find(city1);
-		int numCity2 = cityNumerics.Find(city2);
-
-		cout << "Found: " << numCity1 << " " << numCity2 << endl;
+		int numCity1 = cityNumerics.Find(ticket.departure);
+		int numCity2 = cityNumerics.Find(ticket.arrival);
 
 		if (ticket.price1 == "N/A")
 			graph->matrix[numCity1][numCity2] = inf;
@@ -132,6 +125,8 @@ List<string> findOptimalPath(Graph& pathGraph, Map<string, int>& cityNumerics, i
 	int k = i;
 	while (pathMatrix[k][j] != j)
 	{
+		if (pathMatrix[k][j] == inf)
+			throw invalid_argument("No way");
 		string subCity = cityNumerics.FindKeysByData(pathMatrix[k][j])->getHead();
 		optimalPath->push_back(subCity);
 		k = pathMatrix[k][j];
@@ -144,6 +139,7 @@ List<string> findOptimalPath(Graph& pathGraph, Map<string, int>& cityNumerics, i
 Pair<List<string>, double> findOptimalSolution(List<AirTicket>& ticketsList, string city1, string city2)
 {
 	Map<string, int> cityNumerics = giveCitiesUniqueNumbers(ticketsList);
+
 	int size = cityNumerics.size;
 
 	int numCity1 = cityNumerics.Find(city1);
@@ -156,7 +152,6 @@ Pair<List<string>, double> findOptimalSolution(List<AirTicket>& ticketsList, str
 
 	Pair<List<string>, double> optimalSoulution;
 
-
 	double optimalWay = graph.matrix[numCity1][numCity2];
 	if (optimalWay == inf)
 		throw invalid_argument("No way");
@@ -165,8 +160,6 @@ Pair<List<string>, double> findOptimalSolution(List<AirTicket>& ticketsList, str
 
 	List<string> optimalPath = findOptimalPath(pathGraph, cityNumerics, numCity1, numCity2);
 	optimalSoulution.first = optimalPath;
-
-	
 
 	return optimalSoulution;
 }
