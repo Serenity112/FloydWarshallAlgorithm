@@ -3,9 +3,11 @@
 
 #include "list.h"
 #include "airticket.h"
+#include "pair.h"
 
 List<AirTicket> getTicketsList(string);
 
-double buildOptimalWay(List<AirTicket>&, string, string);
+//Pair<List<string>, double>
+Pair<List<string>, double> findOptimalSolution(List<AirTicket>&, string, string);
 
 #endif

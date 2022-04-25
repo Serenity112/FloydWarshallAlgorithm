@@ -2,6 +2,6 @@ Spb;Kingisepp;100;200
 Spb;Omsk;1;2
 Omsk;Kirov;90;170
 Kirov;Kingisepp;7;8
-Kirov;Spb;12;13
+Kirov;Spb;300;400
 Florida;Spb;11;14
-Florida;Kirov;1;1
+Florida;Kirov;1;1	

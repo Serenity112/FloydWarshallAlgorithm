@@ -44,10 +44,36 @@ public:
 		size = 0;
 	}
 
+	List(const List& list) : List()
+	{
+		Node* current = list.head;
+
+		while (current != nullptr)
+		{
+			this->push_back(current->value);
+			current = current->next;
+		}
+	}
+
+	List<T>& operator=(List<T> list)
+	{
+		this->head = list.head;
+		list.head = nullptr;
+		this->last = list.last;
+		list.last = nullptr;
+		this->size = list.size;
+		return *this;
+	}
+
 	~List()
 	{
 		while (!isEmpty())
 			pop_back();
+	}
+
+	T getHead()
+	{
+		return this->head->value;
 	}
 
 	void push_back(T elem)

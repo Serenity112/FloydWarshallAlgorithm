@@ -2,9 +2,12 @@
 #include "graph.h"
 #include "airticket.h"
 
+#include <limits.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+
+#define inf DBL_MAX
 
 Map<string, int> giveCitiesUniqueNumbers(List<AirTicket>& ticketsList)
 {
@@ -39,7 +42,7 @@ List<string> tokenize(string line, string separator = " ")
 {
 	int start = 0;
 	int end = line.find(separator);
-	List<string>* splittedLines = new List<string>;
+	List<string>* splittedLines = new List<string>();
 
 	while (end != -1)
 	{
@@ -83,6 +86,11 @@ Graph buildGraphByTickets(List<AirTicket>& ticketsList, Map<string, int>& cityNu
 {
 	Graph* graph = new Graph(cityNumerics.size);
 	
+	for (int i = 0; i < graph->size; i++)
+	{
+		graph->matrix[i][i] = 0;
+	}
+
 	auto ticket_itr = ticketsList.create_iterator();
 	while (ticket_itr->has_next())
 	{
@@ -113,44 +121,52 @@ Graph buildGraphByTickets(List<AirTicket>& ticketsList, Map<string, int>& cityNu
 	return *graph;
 }
 
-double buildOptimalWay(List<AirTicket>& ticketsList, string city1, string city2)
+List<string> findOptimalPath(Graph& pathGraph, Map<string, int>& cityNumerics, int i, int j)
+{
+	List<string>* optimalPath = new List<string>();
+
+ 	optimalPath->push_back(cityNumerics.FindKeysByData(i)->getHead());
+
+	double** pathMatrix = pathGraph.matrix;
+
+	int k = i;
+	while (pathMatrix[k][j] != j)
+	{
+		string subCity = cityNumerics.FindKeysByData(pathMatrix[k][j])->getHead();
+		optimalPath->push_back(subCity);
+		k = pathMatrix[k][j];
+	}
+
+	optimalPath->push_back(cityNumerics.FindKeysByData(j)->getHead());
+	return *optimalPath;
+}
+
+Pair<List<string>, double> findOptimalSolution(List<AirTicket>& ticketsList, string city1, string city2)
 {
 	Map<string, int> cityNumerics = giveCitiesUniqueNumbers(ticketsList);
-
-	auto itr = cityNumerics.create_iterator();
-	while(itr->has_next())
-	{
-		Pair<string, int> pair = itr->next();
-		cout << pair.first << " " << pair.second << endl;
-	}
-
-
-	Graph graph = buildGraphByTickets(ticketsList, cityNumerics);
-
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-			cout << graph.matrix[i][j] << " ";
-		cout << endl;
-	}
-
-	FloydWarshall(graph);
-
+	int size = cityNumerics.size;
 
 	int numCity1 = cityNumerics.Find(city1);
 	int numCity2 = cityNumerics.Find(city2);
 
-	if (graph.matrix[numCity1][numCity2] == inf)
+	Graph graph = buildGraphByTickets(ticketsList, cityNumerics);
+
+	Graph pathGraph(size);
+	FloydWarshall(graph, pathGraph);
+
+	Pair<List<string>, double> optimalSoulution;
+
+
+	double optimalWay = graph.matrix[numCity1][numCity2];
+	if (optimalWay == inf)
 		throw invalid_argument("No way");
 
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-			cout << graph.matrix[i][j] << " ";
-		cout << endl;
-	}
+	optimalSoulution.second = optimalWay;
 
-	return graph.matrix[numCity1][numCity2];
+	List<string> optimalPath = findOptimalPath(pathGraph, cityNumerics, numCity1, numCity2);
+	optimalSoulution.first = optimalPath;
 
+	
 
+	return optimalSoulution;
 }

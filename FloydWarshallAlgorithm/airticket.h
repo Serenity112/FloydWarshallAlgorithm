@@ -2,11 +2,7 @@
 #define AIRTICKET_H
 
 using namespace std;
-
 #include <string>
-#include <limits.h>
-
-#define inf DBL_MAX
 
 struct AirTicket
 {

@@ -15,6 +15,6 @@ struct Graph
 	Graph(int);
 };
 
-void FloydWarshall(Graph&);
+void FloydWarshall(Graph&, Graph&);
 
 #endif

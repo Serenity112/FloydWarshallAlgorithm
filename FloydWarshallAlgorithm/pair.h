@@ -8,10 +8,16 @@ public:
 	T1 first;
 	T2 second;
 
-	Pair(T1 first, T2 second)
+	Pair(const T1& first, const T2& second)
 	{
 		this->first = first;
 		this->second = second;
+	}
+
+	Pair(const Pair& pair)
+	{
+		this->first = pair.first;
+		this->second = pair.second;
 	}
 
 	Pair() { }
