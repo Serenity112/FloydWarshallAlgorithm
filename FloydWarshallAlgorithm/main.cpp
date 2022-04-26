@@ -14,7 +14,7 @@ int main()
 
 	try
 	{
-		Pair<List<string>, double> optimalSolution = findOptimalSolution(ticketsList, "Spb", "Kingisepp");
+		Pair<List<string>, double> optimalSolution = findOptimalSolution(ticketsList, "Omsk", "Florida");
 
 		cout << "Optimal price: " << optimalSolution.second << endl;
 

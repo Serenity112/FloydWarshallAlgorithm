@@ -79,37 +79,26 @@ public:
 	public:
 		friend class Map;
 
-		List<Pair<T1, T2>> pairs;
-
-		Iterator<Pair<T1, T2>>* listiter;
+		Iterator<Pair<T1, T2>>* treeiter;
 
 		MapIterator(RBTree<T1, T2>* rbtree)
 		{
-			auto treeiter = rbtree->create_iterator();
-
-			while (treeiter->has_next())
-			{
-				pairs.push_back(treeiter->next());
-			}
-
-			listiter = pairs.create_iterator();
-
-			delete treeiter;
+			treeiter = rbtree->create_iterator();
 		}
 
 		~MapIterator()
 		{
-			delete listiter;
+			delete treeiter;
 		}
 
 		bool has_next()
 		{
-			return listiter->has_next();
+			return treeiter->has_next();
 		}
 
 		Pair<T1, T2> next()
 		{
-			return listiter->next();
+			return treeiter->next();
 		}
 	};
 
