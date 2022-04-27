@@ -25,9 +25,9 @@ void FloydWarshall(Graph& graph, Graph& pathGraph)
     double** matrix = graph.matrix;
     double** pathMatrix = pathGraph.matrix;
 
-    for (auto i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
-        for (auto j = 0; j < size; j++)
+        for (int j = 0; j < size; j++)
         {
             if (i == j)
             {
